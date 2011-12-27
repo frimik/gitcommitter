@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'logger'
+require 'rubygems'
+require 'git'
+
+begin
+  g = Git.open('/etc', :log => Logger.new(STDOUT))
+  g.commit_all('auto commit')
+  g.push
+rescue Git::GitExecuteError
+  err = $!.message
+  command, error = err.split(/:/)
+  puts "Command: #{command}"
+  error.each_line {|e|
+    if (e.match(/^#/)) then
+      # do nothing
+    else
+      case e
+      when /^nothing/
+        puts "Info: #{e}"
+        exit 0
+      else
+        raise
+      end
+    end
+  }
+end
+
