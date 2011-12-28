@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'logger'
-require 'rubygems'
-require 'git'
 require 'optparse'
 require 'syslog'
+require 'rubygems'
+require 'git'
 
 program = File.basename($0)
 
