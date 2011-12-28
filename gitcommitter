@@ -30,6 +30,7 @@ rescue Git::GitExecuteError
   err = $!.message
   command, error = err.split(/:/)
   puts "Command: #{command}"
+  # FIXME Get the message output in a better way. This is pretty broken.
   error.each_line {|e|
     if (e.match(/^#/)) then
       # do nothing
