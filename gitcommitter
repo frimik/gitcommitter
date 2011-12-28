@@ -3,9 +3,27 @@
 require 'logger'
 require 'rubygems'
 require 'git'
+require 'optparse'
+require 'syslog'
+
+program = File.basename($0)
+
+
+optparse = OptionParser.new do |opt|
+  opt.banner = "Usage: #{program} path"
+  opt.parse!(ARGV)
+end
+
+path = ARGV.first || nil
+
+if (!path) then
+  puts optparse
+  exit 1
+end
+
 
 begin
-  g = Git.open('/etc', :log => Logger.new(STDOUT))
+  g = Git.open(path, :log => Syslog.open(program, Syslog::LOG_PID | Syslog::LOG_CONS, Syslog::LOG_LOCAL0))
   g.commit_all('auto commit')
   g.push
 rescue Git::GitExecuteError
